@@ -1,0 +1,28 @@
+<%-include('./_header.ejs')%>
+<form action="/auth/register" method="post">
+<div class="login">
+    <div class="login-header">
+      <h2>Sign up</h2>
+    </div>
+    <div class="login-form">
+      <h3>Username:</h3>
+      <input type="text" placeholder="Username" name="username"/><br>
+      <h3>Email:</h3>
+      <input type="email" placeholder="Email" name="email"/><br>
+      <h3>Password:</h3>
+      <input type="password" placeholder="Password" name="password"/>
+      <br>
+      <h3>Confirm Password:</h3>
+      <input type="password" placeholder="Password" name="passwordConfirm"/>
+      <br>
+      <button type="submit" class="login-button">Sign up</button>
+      <!-- <input type="button" value="Sign up" class="login-button"/> -->
+      <br>
+  </div>
+  </div>
+  <% if(message != "") {%>
+    <%=message%>
+    <%}%>
+</form>
+ 
+<%-include('./_footer.ejs')%>
