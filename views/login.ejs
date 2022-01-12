@@ -1,19 +1,26 @@
-<%-include('./_header.ejs')%>
-
+<%-include('./partials/_header.ejs')%>
+<form action="/auth/login" method="post">
+  <div class="message">
+    <p><% if(message != "") {%>
+      <%=message%>
+      <%}%>
+    </p>
+    </div>
+  
 <div class="login">
     <div class="login-header">
       <h2>Login</h2>
     </div>
     <div class="login-form">
       <h3>Username:</h3>
-      <input type="text" placeholder="Username"/><br>
+      <input type="text" placeholder="Username" name="username"/><br>
       <h3>Password:</h3>
-      <input type="password" placeholder="Password"/>
+      <input type="password" placeholder="Password" name="password"/>
       <br>
-      <a href="/dashboard"><button type="submit" class="login-button">Sign in</button></a>
+      <button type="submit" class="login-button">Sign in</button>
       <br>
       <a href="signup" class="sign-up">Sign Up!</a>
   </div>
   </div>
-
-<%-include('./_footer.ejs')%>
+</form>
+<%-include('./partials/_footer.ejs')%>

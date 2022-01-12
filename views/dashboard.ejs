@@ -1,4 +1,26 @@
-<%-include('./_dash_header.ejs')%>
+<%-include('./partials/_dash_header.ejs')%>
+<div class="propertyheader">
+        <h2>Your Properties</h2>
+</div>
+<div class="properties">
+        
+        <% property.forEach((prop)=>{ %>
+                <div class="single-property">
+                        <div class="property"> 
+                                <p><span class="key">Location : </span><span class="value"><%=prop.location%></span></p>
+                                <p><span class="key">Price :</span> <span class="value"><%=prop.price%></span></p>
+                                <p class="key">Description </p>
+                                <p class="value"><%=prop.description%></p>
+                                <!-- <div class="renter"><%=prop.renter%></div> -->
+                        </div>
+                        <div class="change-buttons">
+                                <a href="/edit/<%=prop.pid%>"><p class="but edit"><button type="submit"><i class="fas fa-pen"></i>Edit</button></p> </a>                             
+                                <a href="/auth/dashboard/delete/<%=prop.pid%>"> <p class="but delete"><button type="submit"><i class="fas fa-times"></i>Delete</button></p></a>
+                        </div>
+                        
+                </div>
+                
+        <% }) %>
 
-
-<%-include('./_footer.ejs')%>
+</div>
+<%-include('./partials/_footer.ejs')%>

@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const dotenv = require('dotenv')
 dotenv.config({path:'../../.env'})
+require("dotenv").config()
 const db=mysql.createConnection({
     host: 'localhost',
     user: 'root',

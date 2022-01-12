@@ -1,15 +1,16 @@
-<%-include('./_header.ejs')%>
+<%-include('./partials/_header.ejs')%>
     <main>
         <div class="container">
             <div class="title">Rent Your Properties</div>
-            <div class="search">
-                <form action="#" method="get" class="search-box"></form>
-                <input type="text" class="searchTerm" placeholder="Search ....">
-                <button type="submit" class="searchButton">
-                    <i class="fa fa-search"></i>
-                </button>
-                </form>
-            </div>
+            <form action="/search" method="get" class="search-box">
+                <div class="search">
+                    <input type="text" class="searchTerm" placeholder="Search by location ...." name='search'>
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            
             <div class="rent">
                 <div class="choose">
                     <a href="/viewproperties"><button>View properties</button></a>
@@ -22,4 +23,4 @@
 
 
 
-    <%-include('./_footer.ejs')%>
+    <%-include('./partials/_footer.ejs')%>

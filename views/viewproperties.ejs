@@ -1,18 +1,32 @@
-<%-include('./_header.ejs')%>
+<%-include('./partials/_header.ejs')%>
 <div class="properties-container">
-<div class="search">
-    <form action="#" method="get" class="search-box"></form>
-    <input type="text" class="searchTerm" placeholder="Search ....">
-    <button type="submit" class="searchButton">
-        <i class="fa fa-search"></i>
-    </button>
+    <form action="/search" method="get" class="search-box">
+        <div class="view-properties-search">
+            <input type="text" class="searchTerm" placeholder="Search by location...." name='search'>
+            <button type="submit" class="searchButton">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
     </form>
 </div>
+<div class="propertyheader">
+    <h2>All Properties</h2>
 </div>
-<div class='property'>
-    <div class="single-property">
-        
-    </div>
+<div class="properties">
+    
+    <% property.forEach((prop)=>{ %>
+            <div class="single-property">
+                    <div class="property">
+                        <p><span class="key">Location : </span><span class="value"><%=prop.location%></span></p>
+                        <p><span class="key">Price :</span> <span class="value"><%=prop.price%></span></p>
+                        <p class="key">Description </p>
+                        <p class="value"><%=prop.description%></p>
+                        <div class="renter"><%=prop.renter%></div>
+                    </div>
+            </div>
+            
+    <% }) %>
+
 </div>
 
-<%-include('./_footer.ejs')%>
+<%-include('./partials/_footer.ejs')%>

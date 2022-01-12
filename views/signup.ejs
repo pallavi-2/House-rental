@@ -1,5 +1,11 @@
-<%-include('./_header.ejs')%>
+<%-include('./partials/_header.ejs')%>
 <form action="/auth/register" method="post">
+  <div class="message">
+    <p><% if(message != "") {%>
+      <%=message%>
+      <%}%>
+    </p>
+    </div>
 <div class="login">
     <div class="login-header">
       <h2>Sign up</h2>
@@ -20,9 +26,7 @@
       <br>
   </div>
   </div>
-  <% if(message != "") {%>
-    <%=message%>
-    <%}%>
+  
 </form>
  
-<%-include('./_footer.ejs')%>
+<%-include('./partials/_footer.ejs')%>
