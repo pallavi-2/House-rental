@@ -175,7 +175,8 @@ footer p {
 .login input[type="password"],
 .login input[type="number"],
 .login input[type="email"],
-.login input[type="textarea"] {
+.login input[type="textarea"]
+ {
   max-width: 400px;
   width: 80%;
   line-height: 3em;
@@ -186,6 +187,11 @@ footer p {
   outline: none;
   padding-left: 10px;
 }
+
+.login input[type="file"]{
+  margin: 1.4em 2em;
+}
+
 .login-form button {
   height: 30px;
   width: 100px;

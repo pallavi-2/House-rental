@@ -1,5 +1,5 @@
 <%-include('./partials/_dash_header.ejs')%>
-<form action="/auth/dashboard/rent" method="post">
+<form action="/auth/dashboard/rent" method="post" enctype="multipart/form-data">
 <div class="login">
     <div class="login-header">
       <h2>Rent property</h2>
@@ -13,6 +13,8 @@
       <input type="number" placeholder="Price" name="price"/>
       <h3>Description</h3>
       <input type="textarea" placeholder="Description..." name="desc"/>
+      <br>
+      <input type="file" name='samplefile' accept="image/"/>
       <br>
       <button type="submit" class="login-button">Rent</button>
       <br>

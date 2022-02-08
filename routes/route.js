@@ -7,31 +7,7 @@ router.get('/',(req,res)=>{
     res.render('index');
 })
 
-router.get('/search',(req,res)=>{
-    search = req.query.search
-    if(search == ''){
-    db.query('Select * from property ',(err,result)=>{
-        if (err) {
-            console.log(err);
-        }
-        else{
-            return res.render('viewproperties',{property:result})
-        }
-    })
-}
-else{
-    db.query('Select * from property where location = ?', [search],(err,result)=>{
-        if (err) {
-            console.log(err);
-        }
-        else{
-            return res.render('viewproperties',{property:result})
-
-}
-    })
-}
-})
-
+router.get('/search',authController.search)
 
 router.get('/viewproperties',authController.properties)
 

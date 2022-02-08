@@ -1,19 +1,22 @@
 <%-include('./partials/_dash_header.ejs')%>
-<form action="/auth/dashboard/update" method="post">
+<% value.forEach((val)=>{ %>
+<form action="/auth/dashboard/update/<%=val.pid%>" method="post">
 <div class="login">
     <div class="login-header">
       <h2>Rent property</h2>
     </div>
     <div class="login-form">
+      
       <h3>Location</h3>
-      <input type="text" placeholder="Location" name="location"/>
+      <input type="text"  name="location" value="<%=val.location%>"/>
       <h3>Price</h3>
-      <input type="number" placeholder="Price" name="price"/>
+      <input type="number"  name="price" value="<%=val.price%>"/>
       <h3>Description</h3>
-      <input type="textarea" placeholder="Description..." name="desc"/>
+      <input type="textarea"  name="desc" value="<%=val.description%>"/>
       <br>
-      <button type="submit" class="login-button">Rent</button>
+      <button type="submit" class="login-button">Update</button>
       <br>
+      <% }) %>
   </div>
   </div>
 </form>
