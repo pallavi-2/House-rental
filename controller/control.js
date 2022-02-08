@@ -1,23 +1,50 @@
 const mysql = require('mysql');
-const express = require('express');
 const bcrypt = require('bcryptjs')
 const db = require('../database/connect');
+const path = require('path');
+const Connection = require('mysql/lib/Connection');
+
+//search
+exports.search = (req, res) => {
+    search = req.query.search
+    if (search == '') {
+        db.query('Select * from property ', (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                return res.render('viewproperties', { property: result })
+            }
+        })
+    }
+    else {
+        db.query('Select * from property where location = ?', [search], (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                return res.render('viewproperties', { property: result })
+
+            }
+        })
+    }
+}
 
 //Properties on index
-exports.properties = (req,res)=>{
+exports.properties = (req, res) => {
     db.query('Select * from property ', (err, result) => {
         if (err) {
             console.log(err);
         }
-        else{
-            return res.render('viewproperties',{property:result})
+        else {
+            return res.render('viewproperties', { property: result })
         }
     })
 }
 
 //Register
-exports.register = (req, res) => {
-    const name = req.body.username;
+exports.register = async (req, res) => {
+    const name = req.body.username.toUpperCase();
     const password = req.body.password;
     const email = req.body.email;
     const passwordConfirm = req.body.passwordConfirm;
@@ -25,110 +52,122 @@ exports.register = (req, res) => {
 
     if (name && password && email && passwordConfirm) {
 
-    db.query('SELECT email FROM user where email=? ', [email], async (err, result) => {
-        if (err) {
-            console.log(err)
-        }
-        if (result.length > 0) {
-            return res.render('signup', {
-                message: 'The email is already in use'
-            })
-        }
-        else if (password !== passwordConfirm) {
-            return res.render('signup', {
-                message: 'The passwords do not match'
-            })
-        }
-        // let hashedPassword = await bcrypt.hash(password, 8)
-
-        db.query('insert into user set ?', { name: name, email: email, password: password }, (err, result) => {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                return res.render('signup', {
-                    message: 'user registerd'
-                })
-            }
-
-        })
-    })
-}
-else{
-    res.render('signup',{
-        message: 'Please fill the details'
-    })
-}
-}
-
-//login
-exports.login = (req, res) => {
-    const session = req.session
-    const name = req.body.username;
-    const password = req.body.password;
-    if (name && password) {
-        db.query('SELECT id,name,password FROM user where name=? and password = ?', [name,password], (err, result) => {
+        db.query('SELECT email FROM user where email=? ', [email], async (err, result) => {
             if (err) {
                 console.log(err)
             }
-            if (result.length>0){
-                
+            if (result.length > 0) {
+                return res.render('signup', {
+                    message: 'The email is already in use'
+                })
+            }
+            else if (password !== passwordConfirm) {
+                return res.render('signup', {
+                    message: 'The passwords do not match'
+                })
+            }
+            let hashedPassword = await bcrypt.hash(password, 8)
+
+            db.query('insert into user set ?', { name: name, email: email, password: hashedPassword }, (err, result) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    return res.render('signup', {
+                        message: 'user registerd'
+                    })
+                }
+
+            })
+        })
+    }
+    else {
+        res.render('signup', {
+            message: 'Please fill the details'
+        })
+    }
+}
+
+//login
+exports.login = async (req, res) => {
+    const session = req.session
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (email && password) {
+        db.query('SELECT id,name,email,password FROM user where email=? ', [email], async (err, result) => {
+            if (err) {
+                console.log(err)
+            }
+            const compared = await bcrypt.compare(password, result[0].password)
+            if (!compared) {
+                res.render('login', {
+                    message: 'The email and password do not match'
+                })
+            }
+            if (result.length > 0) {
+
                 req.session.loggedin = true;
-                req.session.name = name;
+                req.session.name = result[0].name;
                 req.session.userId = result[0].id;
                 res.redirect('/auth/dashboard');
-            }
-            else{
-                res.render('login',{
-                    message: 'The username and password do not match'}
-                )
-                
             }
         }
         )
     }
-    else{
-        res.render('login',{
-            message: 'Please enter username and password'
+    else {
+        res.render('login', {
+            message: 'Please enter email and password'
         })
-        
+
     }
 }
 
 //Properties on dashboard
-exports.dashboard=(req,res)=>{
-	const userId = req.session.userId;
+exports.dashboard = (req, res) => {
+    const userId = req.session.userId;
     db.query('Select * from property where uid=?', [userId], (err, result) => {
         if (err) {
             console.log(err);
         }
-        else{
-            return res.render('dashboard',{message:req.session.name,property:result})
+        else {
+            return res.render('dashboard', { message: req.session.name, property: result })
+        }
+    })
+
+}
+//display edit page
+exports.edit = (req, res) => {
+    db.query('Select * from property where pid =?', [req.params.id], (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('edit', { message: req.session.name, value: result })
         }
     })
 
 }
 
 //edit
-exports.edit=(req,res)=>{
+exports.update = (req, res) => {
     const location = req.body.location
     const price = req.body.price
     const desc = req.body.desc
     const user = req.session.name
     const userId = req.session.userId
-    db.query('Update property set ? where pid', { uid:userId,renter: user, location:location,price:price,description:desc }, (err, result) => {
+    db.query('Update property set uid=?, renter=?,location=?,price=?,description=? where pid=?', [userId, user, location, price, desc, req.params.id], (err, result) => {
         if (err) {
             console.log(err);
         }
         else {
-            return res.redirect('/auth/dashboard/rent',)
+            return res.redirect('/auth/dashboard',)
         }
 
     })
-    
+
 }
 
-exports.delete=(req,res)=>{
+exports.delete = (req, res) => {
     db.query('Delete from property where pid=?', [req.params.id], (err, result) => {
         if (err) {
             console.log(err);
@@ -142,14 +181,21 @@ exports.delete=(req,res)=>{
 }
 
 //Rent properties
-exports.rent=(req,res)=>{
-    const location = req.body.location.toUpperCase()
-    const price = req.body.price
-    const desc = req.body.desc
-    const user = req.session.name
-    const userId = req.session.userId
+exports.rent = (req, res) => {
+    const location = req.body.location.toUpperCase();
+    const price = req.body.price;
+    const desc = req.body.desc;
+    const user = req.session.name;
+    const userId = req.session.userId;
+    const sampleFile = req.files.samplefile;
+    const uploadPath = path.join(__dirname,'..','public','images' , sampleFile.name)
+    sampleFile.mv(uploadPath, (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+    })
 
-    db.query('insert into property set ?', { uid:userId,renter: user, location:location,price:price,description:desc }, (err, result) => {
+    db.query('insert into property set ?', { uid: userId, renter: user, location: location, price: price, description: desc ,image:sampleFile.name}, (err, result) => {
         if (err) {
             console.log(err);
         }
@@ -158,6 +204,5 @@ exports.rent=(req,res)=>{
         }
 
     })
-
 }
 
