@@ -188,6 +188,16 @@ footer p {
   padding-left: 10px;
 }
 
+.login #type{
+  width: 80%;
+  margin: 1em 2em;
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: 2px solid #c2c2c2;
+  outline: none;
+  
+}
+
 .login input[type="file"]{
   margin: 1.4em 2em;
 }

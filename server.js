@@ -14,6 +14,7 @@ const publicDirectory = path.join(__dirname,'./public')
 app.use(express.static(publicDirectory));
 app.use('/css', express.static(path.resolve(__dirname, "public/css")))
 app.use('/images', express.static(path.resolve(__dirname, "public/images")))
+app.use('/js', express.static(path.resolve(__dirname, "public/js")))
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())

@@ -3,6 +3,12 @@
   <div class="message">
     <p><% if(message != "") {%>
       <%=message%>
+      <% if (type == "success"){%>
+        <script>
+          let message = document.querySelector(".message p")
+          message.style.color = "green"
+        </script>
+        <%}%>
       <%}%>
     </p>
     </div>
