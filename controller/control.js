@@ -58,12 +58,12 @@ exports.register = async (req, res) => {
             }
             if (result.length > 0) {
                 return res.render('signup', {
-                    message: 'The email is already in use'
+                    message: 'The email is already in use',type:"error"
                 })
             }
             else if (password !== passwordConfirm) {
                 return res.render('signup', {
-                    message: 'The passwords do not match'
+                    message: 'The passwords do not match',type:"error"
                 })
             }
             let hashedPassword = await bcrypt.hash(password, 8)
@@ -74,7 +74,7 @@ exports.register = async (req, res) => {
                 }
                 else {
                     return res.render('signup', {
-                        message: 'user registerd'
+                        message: 'user registerd',type:"success"
                     })
                 }
 
@@ -83,7 +83,7 @@ exports.register = async (req, res) => {
     }
     else {
         res.render('signup', {
-            message: 'Please fill the details'
+            message: 'Please fill the details',type:"error"
         })
     }
 }
